@@ -5,7 +5,7 @@
 const LC={base:'#c4884a',light:'#f1c98e',dark:'#7a4a22',belly:'#f1dcb0',paw:'#e2b57c',maneD:'#361708',maneM:'#76381a',maneL:'#c38745',maneT:'#e9bd73',out:'#2b1509',nose:'#2a1410',eye:'#e39a22'};
 const FORE_K=[[0,-.45,-.05],[.45,.5,.45],[.55,.6,1.7],[.75,0,1.3],[.9,-.6,-.2],[1,-.45,-.05]];
 const HIND_K=[[0,-.6,.45,-.1],[.45,.25,.95,.7],[.55,.35,1.35,2.1],[.75,-.35,1.1,.8],[.9,-.75,.45,-.15],[1,-.6,.45,-.1]];
-const LION_BODY=[[84,-84],[76,-104],[54,-117],[26,-115],[-4,-108],[-36,-109],[-64,-115],[-90,-108],[-105,-90],[-104,-70],[-90,-58],[-66,-60],[-38,-58],[-10,-52],[20,-45],[48,-43],[68,-51],[80,-66]];
+const LION_BODY=[[84,-84],[76,-104],[54,-117],[26,-115],[-4,-110],[-36,-110],[-58,-113],[-76,-110],[-87,-102],[-92,-88],[-83,-66],[-64,-58],[-40,-57],[-12,-53],[20,-46],[48,-44],[68,-51],[80,-66]];
 const LION_HEAD=[[-2,-26],[18,-21],[30,-11],[38,-2],[42,5],[38,12],[31,19],[20,25],[4,24],[-12,15],[-18,-6]];
 function lionPose(mode,t){
   const P={bob:0,pitch:0,cr:0,ls:1,tail:Math.sin(t*TAU)*.5,head:0,mouth:.15,eyes:'open',sweep:1};
@@ -27,34 +27,43 @@ function lionTuft(g,x0,y0,ang,len,w,bend,c1,c2){
   g.beginPath();g.moveTo(x0+nx*w/2,y0+ny*w/2);g.quadraticCurveTo(mx+nx*w*.42,my+ny*w*.42,tx,ty);g.quadraticCurveTo(mx-nx*w*.42,my-ny*w*.42,x0-nx*w/2,y0-ny*w/2);g.closePath();
   const gr=g.createLinearGradient(x0,y0,tx,ty);gr.addColorStop(0,c1);gr.addColorStop(1,c2);g.fillStyle=gr;g.fill();
 }
+function lionGrad(g,far){const f=c=>far?drk(c,.4):c;return vgrad(g,-118,12,[[0,f(LC.light)],[.13,f(LC.base)],[.44,f(mixHex(LC.base,LC.belly,.28))],[.57,f(mixHex(LC.base,LC.belly,.42))],[.7,f(LC.base)],[1,f(drk(LC.base,.32))]]);}
 function drawLionG(g,P){
-  const cr=P.cr,ls=P.ls,S=[48,-70],HP=[-62,-78];
+  const cr=P.cr,ls=P.ls,S=[46,-72],HP=[-68,-84];
   g.save();
   g.translate(0,P.bob+cr);g.translate(0,-80);g.rotate(P.pitch);g.translate(0,80);
   const pawPaint=(x,y,a,far)=>{const c=far?drk(LC.paw,.4):LC.paw,f=[Math.cos(a),Math.sin(a)];
-    paint(g,()=>ellPath(g,x+f[0]*6,y+f[1]*6-2,11.5,7,a),{fill:vgrad(g,y-10,y+5,[[0,lit(c,.25)],[1,drk(c,.25)]]),line:rgba(LC.out,.75),lw:1.2});
-    g.strokeStyle=rgba(LC.out,.55);g.lineWidth=.9;for(let i=0;i<3;i++){const ox=x+f[0]*(9+i*4)-f[1]*2,oy=y+f[1]*(9+i*4)-2+f[0]*2;g.beginPath();g.moveTo(ox,oy+2);g.lineTo(ox-f[1]*3,oy+2+f[0]*3);g.stroke();}};
-  const fore=(a,far)=>{const pts=chain(S,[[36*ls,a[0]],[38*ls,a[1]]]),all=[[S[0]-2,S[1]-18],...pts],base=far?drk(LC.base,.4):LC.base;
-    paint(g,()=>limbPath(g,all,[30,29,21,15]),{fill:vgrad(g,-112,8,[[0,lit(base,.2)],[.55,base],[1,drk(base,.25)]]),line:rgba(LC.out,.32),lw:1.2,fn:()=>{
-      soft(g,pts[1][0]+6,pts[1][1]-4,12,22,'#fff1cc',far?.05:.22);soft(g,pts[1][0]-8,pts[1][1]+10,8,18,'#2a1206',.25);
-      furStrokes(g,60,[pts[0][0]-24,pts[0][1]-30,48,80],()=>PI*.5+.2,5,[lit(base,.3),drk(base,.3)],far?3:4,.3,.9);}});
-    pawPaint(pts[2][0],pts[2][1],a[1],far);};
-  const hind=(a,far)=>{const pts=chain(HP,[[36*ls,a[0]],[36*ls,a[1]],[20*ls,a[2]]]),all=[[HP[0]-6,HP[1]-14],...pts],base=far?drk(LC.base,.4):LC.base;
-    paint(g,()=>limbPath(g,all,[40,38,27,15,13]),{fill:vgrad(g,-112,8,[[0,lit(base,.18)],[.5,base],[1,drk(base,.25)]]),line:rgba(LC.out,.32),lw:1.2,fn:()=>{
-      soft(g,HP[0]+4,HP[1]-6,24,26,'#fff1cc',far?.05:.25);soft(g,pts[2][0]+4,pts[2][1],10,16,'#2a1206',.22);
-      furStrokes(g,70,[HP[0]-40,HP[1]-34,80,90],()=>PI*.55,5,[lit(base,.3),drk(base,.3)],far?5:6,.3,.9);}});
-    pawPaint(pts[3][0],pts[3][1],a[2]*.3,far);};
-  /* tail */
-  const s=P.tail,tp=[[-94,-98],[-113,-96+s*4],[-129,-86+s*10],[-141,-94+s*16],[-149,-110+s*20]];
-  paint(g,()=>limbPath(g,tp,[11,8,7,6,5]),{fill:vgrad(g,-125,-78,[[0,LC.base],[1,LC.dark]]),line:rgba(LC.out,.7),lw:1.2});
+    paint(g,()=>ellPath(g,x+f[0]*6,y+f[1]*6-2,12,7.5,a),{fill:vgrad(g,y-10,y+5,[[0,lit(c,.2)],[1,drk(c,.3)]]),line:rgba(LC.out,.7),lw:1.1});
+    g.strokeStyle=rgba(LC.out,.5);g.lineWidth=.9;for(let i=0;i<3;i++){const ox=x+f[0]*(9+i*4)-f[1]*2,oy=y+f[1]*(9+i*4)-2+f[0]*2;g.beginPath();g.moveTo(ox,oy+2);g.lineTo(ox-f[1]*3,oy+2+f[0]*3);g.stroke();}};
+  /* outlines are only drawn where a near leg leaves the body, so limbs merge into the torso */
+  const outsideBody=fn=>{g.save();g.beginPath();g.rect(-500,-500,1000,1000);crPath(g,LION_BODY,true);g.clip('evenodd');fn();g.restore();};
+  const edge=(path,far)=>{if(far){path();g.lineWidth=1.1;g.strokeStyle=rgba(LC.out,.6);g.stroke();}else outsideBody(()=>{path();g.lineWidth=1.35;g.strokeStyle=rgba(LC.out,.78);g.stroke();});};
+  const fore=(a,far)=>{const pts=chain(S,[[36*ls,a[0]],[38*ls,a[1]]]),all=[[S[0]-2,S[1]-28],...pts],path=()=>limbPath(g,all,[26,32,22,15]);
+    path();g.fillStyle=lionGrad(g,far);g.fill();
+    g.save();path();g.clip();
+    soft(g,pts[0][0]+8,pts[0][1]-8,15,26,'#fff1cc',far?.04:.2);soft(g,pts[1][0]-7,pts[1][1]+6,7,16,'#2a1206',.24);
+    soft(g,(pts[1][0]+pts[2][0])/2+4,(pts[1][1]+pts[2][1])/2,5,16,'#fff1cc',far?.03:.15,a[1]);
+    furStrokes(g,70,[pts[0][0]-28,pts[0][1]-36,56,112],()=>PI*.5+.15,5,[lit(LC.base,.3),drk(LC.base,.3)],far?3:4,.28,.9);
+    g.restore();edge(path,far);pawPaint(pts[2][0],pts[2][1],a[1],far);};
+  const hind=(a,far)=>{const pts=chain(HP,[[38*ls,a[0]],[38*ls,a[1]],[22*ls,a[2]]]),all=[[-80,-98],...pts],path=()=>limbPath(g,all,[28,50,30,15,13]);
+    path();g.fillStyle=lionGrad(g,far);g.fill();
+    g.save();path();g.clip();
+    soft(g,HP[0]+3,HP[1]-5,22,28,'#fff1cc',far?.05:.26);soft(g,HP[0]-19,HP[1]+8,8,26,'#2a1206',.22,.2);
+    soft(g,pts[1][0]+2,pts[1][1]+6,8,12,'#2a1206',.18);soft(g,(pts[1][0]+pts[2][0])/2,(pts[1][1]+pts[2][1])/2,6,14,'#fff1cc',far?.03:.12,a[1]);
+    furStrokes(g,95,[HP[0]-46,HP[1]-30,92,122],()=>PI*.58,5,[lit(LC.base,.3),drk(LC.base,.3)],far?5:6,.28,.9);
+    if(!far){g.strokeStyle=rgba(LC.out,.2);g.lineWidth=1.2;g.beginPath();g.moveTo(HP[0]-15,HP[1]-12);g.quadraticCurveTo(HP[0]-3,pts[1][1]-10,pts[1][0]+4,pts[1][1]+2);g.stroke();}
+    g.restore();edge(path,far);pawPaint(pts[3][0],pts[3][1],a[2]*.3,far);};
+  /* tail, set high on the croup */
+  const s=P.tail,tp=[[-84,-106],[-103,-101+s*4],[-120,-90+s*10],[-133,-96+s*16],[-142,-112+s*20]];
+  paint(g,()=>limbPath(g,tp,[10,7.5,6.5,5.5,4.5]),{fill:vgrad(g,-125,-78,[[0,LC.base],[1,LC.dark]]),line:rgba(LC.out,.7),lw:1.1});
   {const e=tp[4],R=rng(41);for(let i=0;i<22;i++){const a=-PI/2+(R()-.5)*1.6-s*.4;lionTuft(g,e[0]+(R()-.5)*4,e[1]+(R()-.5)*4,a,10+R()*9,6,(R()-.5)*6,LC.maneD,mixHex(LC.maneD,LC.maneM,.6));}}
   hind(P.hindFar,true);fore(P.foreFar,true);
   /* body */
   const bodyP=()=>shapePath(g,LION_BODY);
-  paint(g,bodyP,{fill:vgrad(g,-118,-42,[[0,LC.light],[.3,LC.base],[.78,mixHex(LC.base,LC.belly,.32)],[1,mixHex(LC.base,LC.belly,.55)]]),line:rgba(LC.out,.8),lw:1.6,rim:'rgba(255,238,196,.6)',rimW:2.4,rimDy:2.2,fn:()=>{
-    soft(g,44,-90,36,26,'#fff1c8',.3);soft(g,-74,-94,34,28,'#fff1c8',.3);soft(g,-8,-48,90,12,'#3b1d0a',.38);soft(g,-40,-70,30,12,'#3b1d0a',.16);soft(g,26,-60,30,14,'#fff8e0',.14);
-    soft(g,-58,-78,16,26,'#3b1d0a',.18,-.3);soft(g,20,-82,18,24,'#3b1d0a',.1,.3);
-    furStrokes(g,620,[-106,-118,192,78],(x,y)=>PI+.22+(y+84)*.007,7,[LC.light,LC.dark,LC.base,'#fff1cc'],11,.32,1);}});
+  paint(g,bodyP,{fill:lionGrad(g,false),line:rgba(LC.out,.8),lw:1.6,rim:'rgba(255,238,196,.6)',rimW:2.4,rimDy:2.2,fn:()=>{
+    soft(g,44,-90,36,26,'#fff1c8',.3);soft(g,-8,-47,92,12,'#3b1d0a',.36);soft(g,-50,-60,24,7,'#3b1d0a',.16);soft(g,26,-60,30,14,'#fff8e0',.14);
+    soft(g,20,-82,18,24,'#3b1d0a',.1,.3);soft(g,-20,-96,44,10,'#fff4dc',.12);
+    furStrokes(g,620,[-92,-118,178,78],(x,y)=>PI+.22+(y+84)*.007,7,[LC.light,LC.dark,LC.base,'#fff1cc'],11,.32,1);}});
   hind(P.hindNear,false);fore(P.foreNear,false);
   /* saddle blanket */
   const SAD=[[-48,-111],[-20,-111],[8,-114],[33,-117],[37,-100],[33,-80],[-2,-75],[-41,-78],[-52,-93]];

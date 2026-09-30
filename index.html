@@ -24,14 +24,14 @@ body.touch #pad,body.touch #tb{display:flex}
 .btn.big{width:80px;height:80px;background:#8e1720;color:#fff3dc}
 .btn.small{font-size:13px}
 .btn.tiny{width:44px;height:44px;font-size:14px}
-#rot{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:16px;right:76px;font-size:14px;color:#e8d4a8;background:var(--bg);display:none;text-align:left}
+#rot{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:16px;right:170px;font-size:14px;color:#e8d4a8;background:var(--bg);display:none;text-align:left}
 @media (orientation:portrait){body.touch #rot{display:block}}
 </style>
 </head>
 <body>
 <div id="wrap"><canvas id="c" tabindex="0" aria-label="Big Top Bedlam: a circus platformer. Arrow keys move, Space jumps, Down ducks, Shift dashes, C fires the super."></canvas></div>
 <div id="rot">Turn your phone sideways for the full show.</div>
-<div id="tb"><div class="btn tiny" data-a="pause" aria-label="Pause">II</div><div class="btn tiny" data-a="mute" aria-label="Sound">♪</div></div>
+<div id="tb"><div class="btn tiny" data-a="pause" aria-label="Pause">II</div><div class="btn tiny" data-a="mute" aria-label="Sound">♪</div><div class="btn tiny" data-a="music" aria-label="Switch music">♫</div></div>
 <div id="pad" aria-hidden="true">
   <div class="grp"><div class="btn" data-a="left">◀</div><div class="btn" data-a="down">▼</div><div class="btn" data-a="right">▶</div></div>
   <div class="grp"><div class="btn small" data-a="super">SUPER</div><div class="btn small" data-a="dash">DASH</div><div class="btn big" data-a="jump">JUMP</div></div>

@@ -1,0 +1,24 @@
+<!doctype html><meta charset="utf-8"><title>Sprite sheet</title>
+<style>body{margin:0;background:#3a2a22}canvas{display:block}</style>
+<canvas id="c" width="1600" height="1000"></canvas>
+<script src="../src/core.js"></script>
+<script src="../src/art-chars.js"></script>
+<script>
+const ctx=document.getElementById('c').getContext('2d');
+const bg=ctx.createLinearGradient(0,0,0,1000);bg.addColorStop(0,'#5a3226');bg.addColorStop(1,'#2a1810');ctx.fillStyle=bg;ctx.fillRect(0,0,1600,1000);
+const which=location.hash.slice(1)||'all';
+function lionAt(x,y,mode,t,sc=1){const s=bake(330,240,170,210,g=>drawLionG(g,lionPose(mode,t)));ctx.save();ctx.translate(x,y);ctx.scale(sc,sc);blit(ctx,s,0,0);ctx.restore();return s;}
+if(which==='lion'){
+  lionAt(360,300,'run',0,1.8);lionAt(1050,300,'run',.5,1.8);
+  lionAt(360,720,'idle',0,1.8);lionAt(1050,720,'up',0,1.8);
+  lionAt(360,960,'crouch',.3,1.2);lionAt(900,960,'down',0,1.2);lionAt(1350,960,'hurt',0,1.2);
+}else{
+  for(let i=0;i<4;i++)lionAt(170+i*330,240,'run',i/4);
+  const poses=['run','balance','jump','fall','duck','hurt','cheer'];
+  poses.forEach((k,i)=>{const s=bake(140,200,62,182,g=>drawClownG(g,clownPose(k,.2)));ctx.save();ctx.translate(90+i*150,520);ctx.scale(1.2,1.2);blit(ctx,s,0,0);ctx.restore();});
+  ['ride','rideDuck'].forEach((k,i)=>{const s=bake(150,200,60,150,g=>drawClownG(g,clownPose(k,.2)));blit(ctx,s,1180+i*150,470);});
+  const mk=['walk','carry','top','jump','knock'];['brown','blue','pink'].forEach((v,j)=>mk.forEach((k,i)=>{const s=bake(80,90,40,80,g=>drawMonkeyG(g,monkeyPose(k,.2),v));ctx.save();ctx.translate(70+i*90+j*470,700);ctx.scale(1.5,1.5);blit(ctx,s,0,0);ctx.restore();}));
+  for(let i=0;i<3;i++){const s=bake(110,80,55,45,g=>drawCrowG(g,[-1,0,1][i]));ctx.save();ctx.translate(120+i*130,860);ctx.scale(1.2,1.2);blit(ctx,s,0,0);ctx.restore();}
+  const R=rng(5);for(let i=0;i<14;i++){const sp=personSpec(R);const s=bake(60,110,30,100,g=>drawPersonG(g,sp,i%3));ctx.save();ctx.translate(560+i*72,990);ctx.scale(1.3,1.3);blit(ctx,s,0,0);ctx.restore();}
+}
+</script>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Big Top Bedlam</title>
+<meta name="description" content="A fast electro-swing circus platformer: ride a lion through rings of fire, cross the high wire past stacks of monkeys, and hop rolling balls to the finale.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Barlow+Condensed:wght@500;600;700&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#0c0605;--ink:#f6e7c8;--dark:#1a0d07;--red:#b3212b;--gold:#e8b44a}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);overflow:hidden;font-family:"Barlow Condensed","Arial Narrow",sans-serif;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+#wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:max(8px,env(safe-area-inset-top,0px)) 16px max(8px,env(safe-area-inset-bottom,0px));box-sizing:border-box}
+canvas{display:block;border-radius:8px;box-shadow:0 0 0 1px #3a2412,0 30px 80px rgba(0,0,0,.7);touch-action:none;outline:none}
+canvas:focus-visible{box-shadow:0 0 0 3px var(--gold),0 30px 80px rgba(0,0,0,.7)}
+#pad{position:fixed;left:0;right:0;bottom:0;display:none;justify-content:space-between;align-items:flex-end;padding:0 16px calc(12px + env(safe-area-inset-bottom,0px));pointer-events:none}
+#tb{position:fixed;top:calc(8px + env(safe-area-inset-top,0px));right:16px;display:none;gap:8px}
+body.touch #pad,body.touch #tb{display:flex}
+.grp{display:flex;gap:10px;pointer-events:auto;align-items:flex-end}
+.btn{width:62px;height:62px;border-radius:50%;border:2px solid var(--gold);background:rgba(26,13,7,.72);color:var(--ink);font:700 18px "Barlow Condensed",sans-serif;letter-spacing:.06em;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 0 #000;touch-action:none;box-sizing:border-box}
+.btn.on{transform:translateY(3px);box-shadow:0 1px 0 #000;background:var(--gold);color:var(--dark)}
+.btn.big{width:80px;height:80px;background:#8e1720;color:#fff3dc}
+.btn.small{font-size:13px}
+.btn.tiny{width:44px;height:44px;font-size:14px}
+#rot{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:16px;right:76px;font-size:14px;color:#e8d4a8;background:var(--bg);display:none;text-align:left}
+@media (orientation:portrait){body.touch #rot{display:block}}
+</style>
+</head>
+<body>
+<div id="wrap"><canvas id="c" tabindex="0" aria-label="Big Top Bedlam: a circus platformer. Arrow keys move, Space jumps, Down ducks, Shift dashes, C fires the super."></canvas></div>
+<div id="rot">Turn your phone sideways for the full show.</div>
+<div id="tb"><div class="btn tiny" data-a="pause" aria-label="Pause">II</div><div class="btn tiny" data-a="mute" aria-label="Sound">♪</div></div>
+<div id="pad" aria-hidden="true">
+  <div class="grp"><div class="btn" data-a="left">◀</div><div class="btn" data-a="down">▼</div><div class="btn" data-a="right">▶</div></div>
+  <div class="grp"><div class="btn small" data-a="super">SUPER</div><div class="btn small" data-a="dash">DASH</div><div class="btn big" data-a="jump">JUMP</div></div>
+</div>
+<script src="src/core.js"></script>
+<script src="src/art-chars.js"></script>
+<script src="src/art-world.js"></script>
+<script src="src/audio.js"></script>
+<script src="src/game.js"></script>
+</body>
+</html>

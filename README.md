@@ -1,5 +1,7 @@
 # Big Top Bedlam
 
+**Play it:** https://big-top-bedlam.vercel.app
+
 A fast circus platformer inspired by the NES classic *Circus Charlie*, rebuilt with painted lighting, real particle fire and a retro video-game soundtrack that comes in two mixes.
 
 You control the performer directly: run forward and back, jump, duck, dash and parry. The hazards come at you too, so every jump is a timing decision.
